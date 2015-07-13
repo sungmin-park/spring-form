@@ -17,13 +17,21 @@ abstract public class Form {
         return validate()
     }
 
-    public fun validate(): Boolean {
+    public open fun validate(): Boolean {
+        bean.validator!!.validate(this, bindingResult)
         return !hasErrors()
     }
 
     public fun hasErrors(): Boolean {
-        bean.validator!!.validate(this, bindingResult)
         return bindingResult.hasErrors()
+    }
+
+    public fun hasErrors(vararg fields: String): Boolean {
+        return fields.firstOrNull { bindingResult.getFieldErrorCount(it) != 0 } != null
+    }
+
+    public fun reject(name: String, message: String) {
+        bindingResult.rejectValue(name, null, message)
     }
 
     jvmOverloads

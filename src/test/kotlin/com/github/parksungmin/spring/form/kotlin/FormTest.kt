@@ -46,4 +46,10 @@ public class FormTest {
         mockMvc.perform(post("/user/login.json?id=john&password=password"))
                 .andExpect(MockMvcResultMatchers.content().string("""{"data":"john","errors":{}}"""))
     }
+
+    Test
+    public fun testFormReject() {
+        mockMvc.perform(post("/form/reject")).andExpect(MockMvcResultMatchers.content().string("""{"data":null,"errors":{"keyword":["may not be empty"]}}"""))
+        mockMvc.perform(post("/form/reject?keyword=badKeyword")).andExpect(MockMvcResultMatchers.content().string("""{"data":null,"errors":{"keyword":["keyword is not matched"]}}"""))
+    }
 }
