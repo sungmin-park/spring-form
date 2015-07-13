@@ -1,16 +1,13 @@
 package com.github.parksungmin.spring.form
 
 import org.springframework.validation.BindingResult
-import javax.servlet.http.HttpServletRequest
 
 abstract public class Form {
     public val bindingResult: BindingResult
-        get() = beans.webBindingInitializer.bindingResult
-    public val request: HttpServletRequest
-        get() = beans.webBindingInitializer.request!!
+        get() = bean.bindingResult
 
     public fun isPost(): Boolean {
-        return request.getMethod().equals("POST")
+        return bean.request!!.getMethod().equals("POST")
     }
 
     public fun validateOnPost(): Boolean {
@@ -25,7 +22,7 @@ abstract public class Form {
     }
 
     public fun hasErrors(): Boolean {
-        beans.webBindingInitializer.validator!!.validate(this, bindingResult)
+        bean.validator!!.validate(this, bindingResult)
         return bindingResult.hasErrors()
     }
 
@@ -45,9 +42,5 @@ abstract public class Form {
         return Response(data, errors)
     }
 
-    public object beans {
-        val webBindingInitializer = FormWebBindingInitializer()
-        val configurableWebBindingInitializer = FormConfigurableWebBindingInitializer()
-        val requestMappingHandlerAdapter = FormRequestMappingHandlerAdapter()
-    }
+    public object bean : FormBean()
 }
