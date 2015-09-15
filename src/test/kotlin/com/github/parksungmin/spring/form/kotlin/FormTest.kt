@@ -52,4 +52,10 @@ public class FormTest {
         mockMvc.perform(post("/form/reject")).andExpect(MockMvcResultMatchers.content().string("""{"data":null,"errors":{"keyword":["may not be empty"]}}"""))
         mockMvc.perform(post("/form/reject?keyword=badKeyword")).andExpect(MockMvcResultMatchers.content().string("""{"data":null,"errors":{"keyword":["keyword is not matched"]}}"""))
     }
+
+    Test
+    public fun testFormMethodOverride() {
+        mockMvc.perform(post("/form/methodOverride")).andExpect(MockMvcResultMatchers.content().string("""true"""));
+        mockMvc.perform(post("/form/methodOverride?_method=GET")).andExpect(MockMvcResultMatchers.content().string("""false"""));
+    }
 }

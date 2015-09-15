@@ -2,12 +2,16 @@ package com.github.parksungmin.spring.form
 
 import org.springframework.validation.BindingResult
 
-abstract public class Form {
+open public class Form {
     public val bindingResult: BindingResult
         get() = bean.bindingResult
 
     public fun isPost(): Boolean {
-        return bean.request!!.getMethod().equals("POST")
+        var method = bean.request!!.getParameter("_method")
+        if (method.isNullOrBlank()) {
+            method = bean.request!!.getMethod();
+        }
+        return method.equals("POST")
     }
 
     public fun validateOnPost(): Boolean {

@@ -1,5 +1,6 @@
 package com.github.parksungmin.spring.form.kotlin
 
+import com.github.parksungmin.spring.form.Form
 import com.github.parksungmin.spring.form.Response
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestMapping
@@ -15,6 +16,12 @@ class FormController : BaseController() {
             return form.buildResponse(form.getKeyword())
         }
         return form.buildResponse()
+    }
+
+    RequestMapping("/methodOverride")
+    ResponseBody
+    fun methodOverride(form: Form): Boolean {
+        return form.isPost()
     }
 }
 
