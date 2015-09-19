@@ -7,9 +7,9 @@ open public class Form {
         get() = bean.bindingResult
 
     public fun isPost(): Boolean {
-        var method = bean.request!!.getParameter("_method")
+        var method = bean.request.getParameter("_method")
         if (method.isNullOrBlank()) {
-            method = bean.request!!.getMethod();
+            method = bean.request.method;
         }
         return method.equals("POST")
     }
@@ -22,7 +22,7 @@ open public class Form {
     }
 
     public open fun validate(): Boolean {
-        bean.validator!!.validate(this, bindingResult)
+        bean.validator.validate(this, bindingResult)
         return !hasErrors()
     }
 
@@ -38,20 +38,20 @@ open public class Form {
         bindingResult.rejectValue(name, null, message)
     }
 
-    jvmOverloads
-    public fun <T> buildResponse(data: T = null): Response<T> {
-        val errors: MutableMap<String, MutableList<String>> = hashMapOf<String, MutableList<String>>()
-        bindingResult.getFieldErrors().forEach {
-            val list = if (it.getField() !in errors) {
+    @JvmOverloads
+    public fun <T : Any> buildResponse(data: T? = null): Response<T?> {
+        val errors: MutableMap<String, MutableList<String>> = hashMapOf()
+        bindingResult.fieldErrors.forEach {
+            val list = if (it.field !in errors) {
                 val li = arrayListOf<String>()
-                errors.put(it.getField(), li)
+                errors.put(it.field, li)
                 li
             } else {
-                errors.get(it.getField())!!
+                errors.get(it.field)!!
             }
-            list.add(it.getDefaultMessage())
+            list.add(it.defaultMessage)
         }
-        return Response(data, errors)
+        return Response(data, errors.entrySet().sortedBy { it.key }.map { it.key to it.value }.toMap())
     }
 
     public object bean : FormBean()

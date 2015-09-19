@@ -6,9 +6,9 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport
 
-Configuration
-ComponentScan
+@Configuration
+@ComponentScan
 public open class WebMvcConfig : WebMvcConfigurationSupport() {
-    Bean
+    @Bean
     open fun springForm(): Form.bean = Form.bean
 }

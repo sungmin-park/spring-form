@@ -6,20 +6,20 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
 
-Controller
-RequestMapping("/form")
+@Controller
+@RequestMapping("/form")
 class FormController : BaseController() {
-    RequestMapping("/reject")
-    ResponseBody
+    @RequestMapping("/reject")
+    @ResponseBody
     fun reject(form: FormRejectForm): Response<String?> {
         if (form.validateOnPost()) {
-            return form.buildResponse(form.getKeyword())
+            return form.buildResponse(form.keyword)
         }
         return form.buildResponse()
     }
 
-    RequestMapping("/methodOverride")
-    ResponseBody
+    @RequestMapping("/methodOverride")
+    @ResponseBody
     fun methodOverride(form: Form): Boolean {
         return form.isPost()
     }

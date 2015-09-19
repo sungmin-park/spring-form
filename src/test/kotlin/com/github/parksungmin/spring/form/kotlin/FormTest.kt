@@ -14,12 +14,12 @@ import org.springframework.web.context.WebApplicationContext
 import javax.inject.Inject
 import kotlin.properties.Delegates
 
-RunWith(SpringJUnit4ClassRunner::class)
-ContextConfiguration(classes = arrayOf(WebMvcConfig::class))
-WebAppConfiguration
+@RunWith(SpringJUnit4ClassRunner::class)
+@ContextConfiguration(classes = arrayOf(WebMvcConfig::class))
+@WebAppConfiguration
 public class FormTest {
-    Inject
-    private var wac: WebApplicationContext? = null
+    @Inject
+    private lateinit val wac: WebApplicationContext
     private var mockMvc by Delegates.notNull<MockMvc>()
 
     private fun get(urlTemplate: String, vararg urlVariables: Any) =
@@ -34,12 +34,12 @@ public class FormTest {
         mockMvc.perform(get(url)).andExpect(content().string(content))
     }
 
-    Before
+    @Before
     public fun before() {
         mockMvc = MockMvcBuilders.webAppContextSetup(wac).build()
     }
 
-    Test
+    @Test
     public fun testUserLogin() {
         assertContent("/user/login.json", """{"data":null,"errors":{}}""")
         mockMvc.perform(post("/user/login.json")).andExpect(MockMvcResultMatchers.content().string("""{"data":null,"errors":{"id":["may not be empty"],"password":["may not be empty"]}}"""))
@@ -47,13 +47,13 @@ public class FormTest {
                 .andExpect(MockMvcResultMatchers.content().string("""{"data":"john","errors":{}}"""))
     }
 
-    Test
+    @Test
     public fun testFormReject() {
         mockMvc.perform(post("/form/reject")).andExpect(MockMvcResultMatchers.content().string("""{"data":null,"errors":{"keyword":["may not be empty"]}}"""))
         mockMvc.perform(post("/form/reject?keyword=badKeyword")).andExpect(MockMvcResultMatchers.content().string("""{"data":null,"errors":{"keyword":["keyword is not matched"]}}"""))
     }
 
-    Test
+    @Test
     public fun testFormMethodOverride() {
         mockMvc.perform(post("/form/methodOverride")).andExpect(MockMvcResultMatchers.content().string("""true"""));
         mockMvc.perform(post("/form/methodOverride?_method=GET")).andExpect(MockMvcResultMatchers.content().string("""false"""));
