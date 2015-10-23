@@ -19,7 +19,7 @@ import kotlin.properties.Delegates
 @WebAppConfiguration
 public class FormTest {
     @Inject
-    private lateinit val wac: WebApplicationContext
+    private lateinit var wac: WebApplicationContext
     private var mockMvc by Delegates.notNull<MockMvc>()
 
     private fun get(urlTemplate: String, vararg urlVariables: Any) =
