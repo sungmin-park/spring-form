@@ -51,7 +51,7 @@ open public class Form {
             }
             list.add(it.defaultMessage)
         }
-        return Response(data, errors.entrySet().sortedBy { it.key }.map { it.key to it.value }.toMap())
+        return Response(data, errors.entries.sortedBy { it.key }.map { it.key to it.value }.toMap())
     }
 
     public object bean : FormBean()
